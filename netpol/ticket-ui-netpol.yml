@@ -1,0 +1,44 @@
+# Ticket UI: accepts connections from the Internet (via the ingress controller only),
+# and can only initiate connections to the three microservices.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ticket-ui-netpol
+  namespace: movies
+spec:
+  podSelector:
+    matchLabels:
+      name: ticket-ui
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              name: tickets
+      ports:
+        - protocol: TCP
+          port: 5000
+    - to:
+        - podSelector:
+            matchLabels:
+              name: users
+      ports:
+        - protocol: TCP
+          port: 5000
+    - to:
+        - podSelector:
+            matchLabels:
+              name: movies
+      ports:
+        - protocol: TCP
+          port: 5555

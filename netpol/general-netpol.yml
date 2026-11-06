@@ -1,0 +1,12 @@
+# General rule: deny all ingress and egress traffic for every pod in "movies".
+# Specific allow rules are added in one file per service.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: movies
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress

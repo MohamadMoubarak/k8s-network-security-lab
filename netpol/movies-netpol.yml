@@ -1,0 +1,22 @@
+# Movies: accepts connections only from the ticket UI.
+# It cannot initiate connections (apart from DNS, from the DNS policy).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: movies-netpol
+  namespace: movies
+spec:
+  podSelector:
+    matchLabels:
+      name: movies
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              name: ticket-ui
+      ports:
+        - protocol: TCP
+          port: 5555

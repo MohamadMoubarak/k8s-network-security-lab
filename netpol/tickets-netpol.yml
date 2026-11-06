@@ -1,0 +1,30 @@
+# Booking (tickets): accepts connections only from the ticket UI,
+# and can only connect to the authentication server (users).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: tickets-netpol
+  namespace: movies
+spec:
+  podSelector:
+    matchLabels:
+      name: tickets
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              name: ticket-ui
+      ports:
+        - protocol: TCP
+          port: 5000
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              name: users
+      ports:
+        - protocol: TCP
+          port: 5000
