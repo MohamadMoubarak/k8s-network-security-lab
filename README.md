@@ -56,3 +56,38 @@ originals, and I have not re-run them yet.
 - By default, Kubernetes lets every pod talk to every other pod.
 - A default-deny policy plus small allow rules follows the least-privilege idea.
 - Small YAML mistakes (a missing selector, a wrong service type) can expose a service.
+
+## Key fixes (diff)
+```diff
+# tickets.yml: the service selector was missing the name label
++    name: tickets
+# tickets.yml: unused HTTPS ports removed (the app listens on 5000)
+-    - name: https
+-      port: 443
+-      protocol: TCP
+-      targetPort: https
+-        - name: https
+-          containerPort: 8443
+# users.yml: authentication server no longer exposed outside the cluster
+-  type: NodePort
++  type: ClusterIP
+```
+
+## Screenshots
+**Login error: the UI looks for services in the wrong namespace**
+![login logs](screenshots/01-login-error-logs.png)
+
+**Inconsistent /bookings results (wrong service selector)**
+![inconsistent bookings](screenshots/02-inconsistent-bookings.png)
+
+**Before any policy: a pod reaches every service**
+![before policy](screenshots/03-before-policy.png)
+
+**After the default deny: the app is blocked (504)**
+![504 after default deny](screenshots/04-after-default-deny-504.png)
+
+**Connectivity test from the UI pod: three services reachable, Internet blocked**
+![ui connectivity test](screenshots/05-ui-connectivity-test.png)
+
+**Final result: app working through the Ingress**
+![final app](screenshots/06-final-app-working.png)
