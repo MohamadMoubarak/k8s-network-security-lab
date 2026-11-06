@@ -81,7 +81,7 @@ originals, and I have not re-run them yet.
 ![inconsistent bookings](screenshots/02-inconsistent-bookings.png)
 
 **Before any policy: a pod reaches every service**
-![before policy](screenshots/03-before-policy.png)
+![before policy](screenshots/03-before-policy1.png)
 
 **After the default deny: the app is blocked (504)**
 ![504 after default deny](screenshots/04-after-default-deny-504.png)
